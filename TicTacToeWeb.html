@@ -88,21 +88,29 @@
 			    }
 			}
 			
-			/*function detectWin() {
-				for (var i = 0; i < 2; i++) {
-					if (i === 0) {
-						player = player1
-					} else {
-						player = player2
-					}
+			function checkRows(player) {
+				for (var y = 0; y < 4; y++) {
+					numFilled = 0
 					
-					// Check top left to bottom right diagonal
-					for (i = 0; i < 4; i++) {
-						if board[i][i] === player
-						numFilled += 1
+					for (var x = 0; x < 4; x++) {
+						if (board[x][y] === player) {
+							numFilled ++
+						}
+					}
+					if (numFilled >= 4) {
+						msg.innerHTML = "Player " + turn + " won!"
 					}
 				}
-			}*/
+			}
+			
+			function detectWin() {
+				if (checkRows(player1)) {
+					return "player1"
+				}
+				if (checkRows(player2)) {
+					return "player2"
+				}
+			}
 
 			function choiceX() {
 				// Set player 1 to X and player 2 to Y
@@ -146,13 +154,15 @@
 				
 				drawBoard()
 				
-				/*winner = detectWin()
+				var winner = detectWin()
+				
+				msg.innerHTML = winner
 				
 				if (winner === "player1") {
 					msg.innerHTML = "Player 1, you won!"
-				} else if (winner === "player2) {
+				} else if (winner === "player2") {
 					msg.innerHTML = "Player 2, you won!"
-				}*/
+				}
 			}
 			
 			/*
