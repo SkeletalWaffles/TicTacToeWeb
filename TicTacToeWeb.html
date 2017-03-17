@@ -99,7 +99,7 @@
 						}
 					}
 					if (numFilled >= 4) {
-						msg.innerHTML = "Player " + turn + " won!"
+						return true
 					}
 				}
 			}
@@ -161,8 +161,6 @@
 					drawBoard()
 
 					var winner = detectWin()
-
-					msg.innerHTML = winner
 
 					if (winner === "player1") {
 						msg.innerHTML = "Player 1, you won!"
