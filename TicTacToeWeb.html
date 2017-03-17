@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Tic Tac Toe</title>
-		
+
 		<style>
 			body {
 			  background-color: white;
@@ -30,22 +30,23 @@
 	</head>
 	<body>
 		<canvas id="canvas" width=400 height=400></canvas>
-		
+
 		<img id="x" src="https://s16.postimg.org/hm4jwg9kl/image.png" width="90">
 		<img id="o" src="https://s8.postimg.org/eaq56smf9/image.png" width="90">
-		
+
 		<p id="msg">Hello! Welcome to Tic Tac Toe! Player 1 choose your letter:</p>
-		
+
 		<button id="choose-x" onclick="choiceX()">X</button>
 		<button id="choose-o" onclick="choiceO()">O</button>
-		
+
 		<script>
 			var canvas = document.getElementById("canvas")
 			var ctx = canvas.getContext("2d")
 			var xImage = document.getElementById("x")
 			var oImage = document.getElementById("o")
 			var msg = document.getElementById("msg")
-			
+			start = false
+
 			var board = []
 			for (var y = 0; y < 4; y++) {
 				var row = []
@@ -54,7 +55,7 @@
 				}
 				board.push(row);
 			}
-		
+
 			player1 = ""
 			player2 = ""
 			turn = 1
@@ -65,7 +66,7 @@
 
 			function drawBoard() {
 				ctx.clearRect(0, 0, canvas.width, canvas.height)
-				
+
 				// Make grid lines
 				for (i = 1; i < 4; i++) {
 				  	ctx.beginPath();
@@ -87,11 +88,11 @@
 			    	}
 			    }
 			}
-			
+
 			function checkRows(player) {
 				for (var y = 0; y < 4; y++) {
 					numFilled = 0
-					
+
 					for (var x = 0; x < 4; x++) {
 						if (board[x][y] === player) {
 							numFilled ++
@@ -102,7 +103,7 @@
 					}
 				}
 			}
-			
+
 			function detectWin() {
 				if (checkRows(player1)) {
 					return "player1"
@@ -115,60 +116,66 @@
 			function choiceX() {
 				// Set player 1 to X and player 2 to Y
 			    msg.innerHTML = "Player 1 make your move"
-			    
+
 			    player1 = "x"
 			    player2 = "o"
-			    
+
 			    document.getElementById("choose-x").style.display = "none"
 			    document.getElementById("choose-o").style.display = "none"
+
+			    start = true
 			}
 
 			function choiceO() {
 				// Set player 1 to Y and player 2 to X
 			    msg.innerHTML = "Player 1 make your move"
-			    
+
 			    player1 = "o"
 			    player2 = "x"
-			    
+
 			    document.getElementById("choose-x").style.display = "none"
 			    document.getElementById("choose-o").style.display = "none"
+
+			    start = true
 			}
 
 			drawBoard()
-			
+
 			canvas.onclick = function(event) {
-				boxX = parseInt(event.clientX/100)
-				boxY = parseInt(event.clientY/100)
-				
-				if (board[boxY][boxX] === null) {
-					if (turn === 1) {
-						msg.innerHTML = "Player 2 make your move"
-						board[boxY][boxX] = player1
-						turn = 2
-					} else {
-						msg.innerHTML = "Player 1 make your move"
-						board[boxY][boxX] = player2
-						turn = 1
+				if (start) {
+					boxX = parseInt(event.clientX/100)
+					boxY = parseInt(event.clientY/100)
+
+					if (board[boxY][boxX] === null) {
+						if (turn === 1) {
+							msg.innerHTML = "Player 2 make your move"
+							board[boxY][boxX] = player1
+							turn = 2
+						} else {
+							msg.innerHTML = "Player 1 make your move"
+							board[boxY][boxX] = player2
+							turn = 1
+						}
+					}
+
+					drawBoard()
+
+					var winner = detectWin()
+
+					msg.innerHTML = winner
+
+					if (winner === "player1") {
+						msg.innerHTML = "Player 1, you won!"
+					} else if (winner === "player2") {
+						msg.innerHTML = "Player 2, you won!"
 					}
 				}
-				
-				drawBoard()
-				
-				var winner = detectWin()
-				
-				msg.innerHTML = winner
-				
-				if (winner === "player1") {
-					msg.innerHTML = "Player 1, you won!"
-				} else if (winner === "player2") {
-					msg.innerHTML = "Player 2, you won!"
-				}
 			}
-			
+
 			/*
 			- initially draw the board, make the buttons etc.
 			- setup an onclick on the canvas
-			
+
 			> when the user clicks
 				- figure out what box it's in
 				- if the box is empty, but the symbol in the box
