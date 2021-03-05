@@ -1,240 +1,250 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Tic Tac Toe</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tic Tac Toe</title>
 
-		<style>
-			body {
-			  background-color: white;
-			}
+    <style>
+      body {
+        background-color: white;
+      }
 
-			#x { display: none; }
-			#o { display: none; }
+      #x {
+        display: none;
+      }
+      #o {
+        display: none;
+      }
 
-			p {
-			    font-size: 20px;
-			    font-family: sans-serif;
-			}
+      p {
+        font-size: 20px;
+        font-family: sans-serif;
+      }
 
-			#choose-x {
-			    font-size: 50px;
-			    font-family: sans-serif;
-			}
+      #choose-x {
+        font-size: 50px;
+        font-family: sans-serif;
+      }
 
-			#choose-o {
-			    font-size: 50px;
-			    font-family: sans-serif;
-			}
-		</style>
-	</head>
-	<body>
-		<canvas id="canvas" width=400 height=400></canvas>
+      #choose-o {
+        font-size: 50px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
 
-		<img id="x" src="https://s16.postimg.org/hm4jwg9kl/image.png" width="90">
-		<img id="o" src="https://s8.postimg.org/eaq56smf9/image.png" width="90">
+    <img id="x" src="images/x-icon.png" width="90" />
+    <img id="o" src="images/o-icon.png" width="90" />
 
-		<p id="msg">Hello! Welcome to Tic Tac Toe! Player 1 choose your letter:</p>
+    <p id="msg">Hello! Welcome to Tic Tac Toe! Player 1 choose your letter:</p>
 
-		<button id="choose-x" onclick="choiceX()">X</button>
-		<button id="choose-o" onclick="choiceO()">O</button>
+    <button id="choose-x" onclick="choiceX()">X</button>
+    <button id="choose-o" onclick="choiceO()">O</button>
 
-		<script>
-			var canvas = document.getElementById("canvas")
-			var ctx = canvas.getContext("2d")
-			var xImage = document.getElementById("x")
-			var oImage = document.getElementById("o")
-			var msg = document.getElementById("msg")
-			start = false
-			gameIsOver = false
+    <script>
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      var xImage = document.getElementById("x");
+      var oImage = document.getElementById("o");
+      var msg = document.getElementById("msg");
+      start = false;
+      gameIsOver = false;
 
-			var board = []
-			for (var y = 0; y < 4; y++) {
-				var row = []
-				for (var x = 0; x < 4; x++) {
-					row.push(null)
-				}
-				board.push(row);
-			}
+      var board = [];
+      for (var y = 0; y < 4; y++) {
+        var row = [];
+        for (var x = 0; x < 4; x++) {
+          row.push(null);
+        }
+        board.push(row);
+      }
 
-			player1 = ""
-			player2 = ""
-			turn = 1
-			var imageForPlayer = {
-				x: xImage,
-				o: oImage,
-			}
+      player1 = "";
+      player2 = "";
+      turn = 1;
+      var imageForPlayer = {
+        x: xImage,
+        o: oImage,
+      };
 
-			function drawBoard() {
-				ctx.clearRect(0, 0, canvas.width, canvas.height)
+      function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-				// Make grid lines
-				for (i = 1; i < 4; i++) {
-				  	ctx.beginPath();
-					ctx.moveTo(100*i, 0)
-					ctx.lineTo(100*i, 500)
-					ctx.stroke()
-			    }
-				for (i = 1; i < 4; i++) {
-				  	ctx.beginPath();
-					ctx.moveTo(0, 100*i)
-					ctx.lineTo(500, 100*i)
-					ctx.stroke()
-			    }
-			    for (var y = 0; y < 4; y++) {
-			    	for (var x = 0; x < 4; x++) {
-			    		if (board[y][x] != null) {
-			    			ctx.drawImage(imageForPlayer[board[y][x]], x * 100 + 5, y * 100 + 5, 90, 90);
-			    		}
-			    	}
-			    }
-			}
+        // Make grid lines
+        for (i = 1; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(100 * i, 0);
+          ctx.lineTo(100 * i, 500);
+          ctx.stroke();
+        }
+        for (i = 1; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(0, 100 * i);
+          ctx.lineTo(500, 100 * i);
+          ctx.stroke();
+        }
+        for (var y = 0; y < 4; y++) {
+          for (var x = 0; x < 4; x++) {
+            if (board[y][x] != null) {
+              ctx.drawImage(
+                imageForPlayer[board[y][x]],
+                x * 100 + 5,
+                y * 100 + 5,
+                90,
+                90
+              );
+            }
+          }
+        }
+      }
 
-			function checkRows(player) {
-				for (var y = 0; y < 4; y++) {
-					var numFilled = 0
+      function checkRows(player) {
+        for (var y = 0; y < 4; y++) {
+          var numFilled = 0;
 
-					for (var x = 0; x < 4; x++) {
-						if (board[y][x] === player) {
-							numFilled ++
-						}
-					}
-					if (numFilled >= 4) {
-						return true
-					}
-				}
-			}
+          for (var x = 0; x < 4; x++) {
+            if (board[y][x] === player) {
+              numFilled++;
+            }
+          }
+          if (numFilled >= 4) {
+            return true;
+          }
+        }
+      }
 
-			function checkColumns(player) {
-				for (var y = 0; y < 4; y++) {
-					var numFilled = 0
+      function checkColumns(player) {
+        for (var y = 0; y < 4; y++) {
+          var numFilled = 0;
 
-					for (var x = 0; x < 4; x++) {
-						if (board[x][y] === player) {
-							numFilled ++
-						}
-					}
-					if (numFilled >= 4) {
-						return true
-					}
-				}
-			}
+          for (var x = 0; x < 4; x++) {
+            if (board[x][y] === player) {
+              numFilled++;
+            }
+          }
+          if (numFilled >= 4) {
+            return true;
+          }
+        }
+      }
 
-			function checkDiagnol(player) {
-					var numFilled = 0
+      function checkDiagnol(player) {
+        var numFilled = 0;
 
-					for (i = 0; i < 4; i++) {
-						if (board[i][i] === player) {
-							numFilled ++
-						}
-					}
-					if (numFilled === 4) {
-						return true
-					}
-			}
+        for (i = 0; i < 4; i++) {
+          if (board[i][i] === player) {
+            numFilled++;
+          }
+        }
+        if (numFilled === 4) {
+          return true;
+        }
+      }
 
-			function checkDiagnol2(player) {
-					var numFilled = 0
+      function checkDiagnol2(player) {
+        var numFilled = 0;
 
-					for (i = 0; i < 4; i++) {
-						if (board[i][3-i] === player) {
-							numFilled ++
-						}
-					}
-					if (numFilled === 4) {
-						return true
-					}
-			}
+        for (i = 0; i < 4; i++) {
+          if (board[i][3 - i] === player) {
+            numFilled++;
+          }
+        }
+        if (numFilled === 4) {
+          return true;
+        }
+      }
 
-			function detectWin() {
-				if (checkRows(player1)) {
-					return "player1"
-				}
-				if (checkRows(player2)) {
-					return "player2"
-				}
-				if (checkColumns(player1)) {
-					return "player1"
-				}
-				if (checkColumns(player2)) {
-					return "player2"
-				}
-				if (checkDiagnol(player1)) {
-					return "player1"
-				}
-				if (checkDiagnol(player2)) {
-					return "player2"
-				}
-				if (checkDiagnol2(player1)) {
-					return "player1"
-				}
-				if (checkDiagnol2(player2)) {
-					return "player2"
-				}
-			}
+      function detectWin() {
+        if (checkRows(player1)) {
+          return "player1";
+        }
+        if (checkRows(player2)) {
+          return "player2";
+        }
+        if (checkColumns(player1)) {
+          return "player1";
+        }
+        if (checkColumns(player2)) {
+          return "player2";
+        }
+        if (checkDiagnol(player1)) {
+          return "player1";
+        }
+        if (checkDiagnol(player2)) {
+          return "player2";
+        }
+        if (checkDiagnol2(player1)) {
+          return "player1";
+        }
+        if (checkDiagnol2(player2)) {
+          return "player2";
+        }
+      }
 
-			function choiceX() {
-				// Set player 1 to X and player 2 to Y
-			    msg.innerHTML = "Player 1 make your move"
+      function choiceX() {
+        // Set player 1 to X and player 2 to Y
+        msg.innerHTML = "Player 1 make your move";
 
-			    player1 = "x"
-			    player2 = "o"
+        player1 = "x";
+        player2 = "o";
 
-			    document.getElementById("choose-x").style.display = "none"
-			    document.getElementById("choose-o").style.display = "none"
+        document.getElementById("choose-x").style.display = "none";
+        document.getElementById("choose-o").style.display = "none";
 
-			    start = true
-			}
+        start = true;
+      }
 
-			function choiceO() {
-				// Set player 1 to Y and player 2 to X
-			    msg.innerHTML = "Player 1 make your move"
+      function choiceO() {
+        // Set player 1 to Y and player 2 to X
+        msg.innerHTML = "Player 1 make your move";
 
-			    player1 = "o"
-			    player2 = "x"
+        player1 = "o";
+        player2 = "x";
 
-			    document.getElementById("choose-x").style.display = "none"
-			    document.getElementById("choose-o").style.display = "none"
+        document.getElementById("choose-x").style.display = "none";
+        document.getElementById("choose-o").style.display = "none";
 
-			    start = true
-			}
+        start = true;
+      }
 
-			drawBoard()
+      drawBoard();
 
-			canvas.onclick = function(event) {
-				if (start) {
-					if (gameIsOver) {
-						return
-					}
+      canvas.onclick = function (event) {
+        if (start) {
+          if (gameIsOver) {
+            return;
+          }
 
-					boxX = parseInt(event.clientX/100)
-					boxY = parseInt(event.clientY/100)
+          boxX = parseInt(event.clientX / 100);
+          boxY = parseInt(event.clientY / 100);
 
-					if (board[boxY][boxX] === null) {
-						if (turn === 1) {
-							msg.innerHTML = "Player 2 make your move"
-							board[boxY][boxX] = player1
-							turn = 2
-						} else {
-							msg.innerHTML = "Player 1 make your move"
-							board[boxY][boxX] = player2
-							turn = 1
-						}
-					}
+          if (board[boxY][boxX] === null) {
+            if (turn === 1) {
+              msg.innerHTML = "Player 2 make your move";
+              board[boxY][boxX] = player1;
+              turn = 2;
+            } else {
+              msg.innerHTML = "Player 1 make your move";
+              board[boxY][boxX] = player2;
+              turn = 1;
+            }
+          }
 
-					drawBoard()
+          drawBoard();
 
-					var winner = detectWin()
+          var winner = detectWin();
 
-					if (winner === "player1") {
-						msg.innerHTML = "Player 1, you won!"
-						gameIsOver = true
-					} else if (winner === "player2") {
-						msg.innerHTML = "Player 2, you won!"
-						gameIsOver = true
-					}
-				}
-			}
-		</script>
-	</body>
+          if (winner === "player1") {
+            msg.innerHTML = "Player 1, you won!";
+            gameIsOver = true;
+          } else if (winner === "player2") {
+            msg.innerHTML = "Player 2, you won!";
+            gameIsOver = true;
+          }
+        }
+      };
+    </script>
+  </body>
 </html>
